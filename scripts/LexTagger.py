@@ -19,9 +19,27 @@ class LexTagger:
 		sub_len = len(sub_arr) # length of the sub-array
 		arr_len = len(arr_arr) # length of the full array
 
-		for i in xrange(arr_len):
+		for i in range(arr_len):
 			if (i + sub_len) <= arr_len and arr_arr[i:i + sub_len] == sub_arr:
 				ind_arr.append(range(i, i + sub_len))
+		return ind_arr
+
+	def getMatchIndices(self, sub_arr, arr_arr):
+		''' Find sub-array in an array -- faster version '''
+		ind_arr = []           # array to store found indices
+		sub_len = len(sub_arr) # length of the sub-array
+		arr_len = len(arr_arr) # length of the full array
+
+		if sub_len == 0 or arr_len == 0:
+			return ind_arr
+		elif len(set(sub_arr) & set(arr_arr)) == 0:
+			return ind_arr
+		elif sub_len == 1:
+			ind_arr = [[i] for i,x in enumerate(arr_arr) if x in sub_arr]
+		elif set(sub_arr) <= set(arr_arr):
+			for i in range(arr_len):
+				if (i + sub_len) <= arr_len and arr_arr[i:i + sub_len] == sub_arr:
+					ind_arr.append(range(i, i + sub_len))
 		return ind_arr
 
 	def rmSubsets(self, lst):
@@ -35,6 +53,12 @@ class LexTagger:
 					# if i is a subset of j, add it to rml
 					if si <= sj:
 						rml.append(lst[i])
+					# if i and j overlap, remove shorter one
+					elif si & sj:
+						if len(si) > len(sj):
+							rml.append(lst[j])
+						else:
+							rml.append(lst[i])
 		return [e for e in lst if e not in rml]
 
 	def flattenList(self, lst):
@@ -64,7 +88,8 @@ class LexTagger:
 		for e in lex:
 			pm = [] # matches for parts
 			for p in e:
-				inds = self.findSubArray(p, lst)
+				#inds = self.findSubArray(p, lst)
+				inds = self.getMatchIndices(p, lst)
 				if inds:
 					pm += inds
 			# check if all parts are present & add to matches

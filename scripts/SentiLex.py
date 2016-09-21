@@ -106,14 +106,13 @@ class SentiLex:
 if __name__ == "__main__":
 
 	argpar = argparse.ArgumentParser(description='Lexicon-based Sentiment Analysis')
-	argpar.add_argument('-x', '--xfile', type=file) # document for tagging as sentence per line (lemmas)
+	argpar.add_argument('-x', '--xfile', type=file) # file for tagging as instance per line (lemmas|tokens)
 	argpar.add_argument('-p', '--pfile', type=file) # polarity lexicon
 	argpar.add_argument('-s', '--sfile', type=file) # polarity shifters
 	argpar.add_argument('-i', '--ifile', type=file) # polarity intensifiers
-	argpar.add_argument('-d', '--dsep', type=str, default='..')
-	argpar.add_argument('-t', '--tsep', type=str, default=' ')
-	argpar.add_argument('-f', '--fsep', type=str, default='\t')
-	argpar.add_argument('--tagged',  action='store_true', help='POS-tagged lexicon')
+	argpar.add_argument('-d', '--dsep', type=str, default='..') #
+	argpar.add_argument('-t', '--tsep', type=str, default=' ')  # +
+	argpar.add_argument('-f', '--fsep', type=str, default='\t') #
 
 	args = argpar.parse_args()
 
